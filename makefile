@@ -4,7 +4,10 @@ all:
 
 bluetoothLE:
 	
-openCV:
+numpy:
+	sudo apt-get install python3-numpy
+	
+openCV: numpy
 
 setup_pi:
 	@sudo sed -i "s/#dtparam=spi=on/dtparam=spi=on/" /boot/config.txt

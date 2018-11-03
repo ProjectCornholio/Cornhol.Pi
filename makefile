@@ -8,6 +8,13 @@ numpy:
 	sudo apt-get install python3-numpy
 	
 openCV: numpy
+	sudo apt-get install build-essential cmake pkg-config -y
+	sudo apt-get install libjpeg8-dev libtiff5-dev libjasper-dev libpng12-dev -y
+	sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev -y
+	sudo apt-get install libgtk2.0-dev -y
+	sudo apt-get insatll libatlas-base-dev gfortran -y
+	git clone https://github.com/opencv/opencv.git -b 3.4.3
+	git clone https://github.com/opencv/opencv_contrib.git -b 3.4.3
 
 setup_pi:
 	@sudo sed -i "s/#dtparam=spi=on/dtparam=spi=on/" /boot/config.txt

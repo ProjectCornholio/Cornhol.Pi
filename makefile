@@ -29,6 +29,7 @@ setup_pi:
 	@echo "Pi Setup complete! Please Reboot"
 
 spidev:
+	# depreciated
 	@sudo apt-get install -y python3-dev
 	@sudo apt-get install -y python3-spidev
 	@git clone https://github.com/Gadgetoid/py-spidev.git

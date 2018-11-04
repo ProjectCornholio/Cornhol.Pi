@@ -12,9 +12,15 @@ openCV: numpy
 	sudo apt-get install libjpeg8-dev libtiff5-dev libjasper-dev libpng12-dev -y
 	sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev -y
 	sudo apt-get install libgtk2.0-dev -y
-	sudo apt-get insatll libatlas-base-dev gfortran -y
+	sudo apt-get install libatlas-base-dev gfortran -y
 	git clone https://github.com/opencv/opencv.git -b 3.4.3
 	git clone https://github.com/opencv/opencv_contrib.git -b 3.4.3
+	# cmake -D CMAKE_BUILD_TYPE=RELEASE \
+	#       -D CMAKE_INSTALL_PREFIX=/usr/local \
+	#       -D INSTALL_C_EXAMPLES=OFF \
+	#       -D INSTALL_PYTHON_EXAMPLES=ON \
+	#       -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules \
+	#       -D BUILD_EXAMPLES=ON ..
 
 setup_pi:
 	@sudo sed -i "s/#dtparam=spi=on/dtparam=spi=on/" /boot/config.txt

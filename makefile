@@ -2,7 +2,6 @@
 all: setup_pi bluetoothLE opencv lightsensor
 
 setup_pi:
-	sudo sed -i "s/#dtparam=spi=on/dtparam=spi=on/" /boot/config.txt
 	sudo sed -i "s/#dtparam=spi=on/dtparam=i2c_arm=on/" /boot/config.txt
 	@echo "Pi Setup complete! Please Reboot"
 

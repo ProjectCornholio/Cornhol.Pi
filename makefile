@@ -1,18 +1,26 @@
 
-all:
+all: setup_pi bluetoothLE opencv lightsensor
 
 setup_pi:
-	@sudo sed -i "s/#dtparam=spi=on/dtparam=spi=on/" /boot/config.txt
+	sudo sed -i "s/#dtparam=spi=on/dtparam=spi=on/" /boot/config.txt
+	sudo sed -i "s/#dtparam=spi=on/dtparam=i2c_arm=on/" /boot/config.txt
 	@echo "Pi Setup complete! Please Reboot"
 
-bluetoothLE:
-	@sudo pip install pybluez
-	# @git clone https://github.com/pybluez/pybluez
-	# @pip install -e .\[ble\] #for ble
+pip:
+	sudo apt-get install python-pip -y
 
-opencv:
-	@sudo pip install opencv-python
+bluetoothLE: pip
+	sudo apt-get install -y pkg-config
+	sudo apt-get install -y libboost-python-dev
+	sudo apt-get install -y libboost-thread-dev
+	sudo apt-get install -y libbluetooth-dev
+	sudo apt-get install -y libglib2.0-dev
+	sudo pip install pybluez
+	sudo pip install pybluez\[ble\]
+
+opencv: pip
+	sudo pip install opencv-python
 
 lightsensor:
-	@sudo apt-get install -y python-smbus i2c-tools
+	sudo apt-get install -y python-smbus i2c-tools
 

@@ -18,7 +18,7 @@ while(True):
     red_lower = np.array([135,64,43],np.uint8)
     red_upper = np.array([180,255,255],np.uint8)
 
-    blue_lower = np.array([91,74,71],np.uint8)
+    blue_lower = np.array([91,74,65],np.uint8)
     blue_upper = np.array([124,255,255],np.uint8)
 
     red = cv2.inRange(hsv, red_lower, red_upper)
@@ -42,7 +42,7 @@ while(True):
            # cv2.putText(frame,"RED color",(x,y),cv2.FONT_HERSHEY_SIMPLEX,0.7,(0,0,255))
            red_count += 1
 
-    contours,hierarchy = cv2.findContours(blue1,cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    contours,hierarchy = cv2.findContours(blue1,cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
     cv2.drawContours(frame, contours, -1, (255,0,0), 2)
     for pic, contour in enumerate(contours):
         area = cv2.contourArea(contour)

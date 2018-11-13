@@ -12,6 +12,7 @@ while(True):
     red_count = 0
     blue_count = 0
     ret,frame = cap.read()
+    frame = frame[0:720,85:525]
 
     hsv = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
 

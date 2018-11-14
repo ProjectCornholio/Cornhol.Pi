@@ -46,7 +46,7 @@ def main():
         cv2.drawContours(frame, contours, -1, (0,0,255), 2)
         for pic, contour in enumerate(contours):
             area = cv2.contourArea(contour)
-            if(area > MIN_BAG_AREA):
+            if(area > min_bag_area):
                red_count += 1
 
         contours, hierarchy = cv2.findContours(blue1,
@@ -55,7 +55,7 @@ def main():
         cv2.drawContours(frame, contours, -1, (255,0,0), 2)
         for pic, contour in enumerate(contours):
             area = cv2.contourArea(contour)
-            if(area > MIN_BAG_AREA):
+            if(area > min_bag_area):
                 blue_count += 1
 
         # display stuff

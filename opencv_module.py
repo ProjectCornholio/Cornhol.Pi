@@ -6,6 +6,7 @@ red_count = 0
 prev_red = 5
 blue_count = 0
 prev_blue = 5
+MIN_BAG_AREA = 700
 
 def main():
     global cap, red_count, prev_red, blue_count, prev_blue
@@ -19,7 +20,7 @@ def main():
 
         hsv = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
 
-        # NOTE: do these red/blue values ever change?
+        # NOTE: do these red/blue values ever change? red/blue_lower and red/blue_upper don't change, but red and blue do cause it takes in each new frame
         # set red min/max color values
         red_lower = np.array([135, 64, 43], np.uint8)
         red_upper = np.array([180, 255, 255], np.uint8)
@@ -30,7 +31,7 @@ def main():
         blue_upper = np.array([124, 255, 255], np.uint8)
         blue = cv2.inRange(hsv, blue_lower, blue_upper)
 
-        # NOTE: does kernal or red1/blue1 or res/res1 ever change?
+        # NOTE: does kernal or red1/blue1 or res/res1 ever change? Kernal doesn't but red/blue1 and res/res1 does because it changes every frame
         kernal = np.ones((5,5), "uint8")
         red1 = cv2.dilate(red, kernal)
         res = cv2.bitwise_and(frame, frame, mask = red)
@@ -38,7 +39,7 @@ def main():
         blue1 = cv2.dilate(blue, kernal)
         res1 = cv2.bitwise_and(frame, frame, mask = blue)
 
-        # NOTE: rename contours to bags?
+        # NOTE: rename contours to bags? not actually just bags, it's all countours being found
         contours, hierarchy = cv2.findContours(red1,
                                                cv2.RETR_TREE,
                                                cv2.CHAIN_APPROX_NONE)
@@ -46,12 +47,7 @@ def main():
         cv2.drawContours(frame, contours, -1, (0,0,255), 2)
         for pic, contour in enumerate(contours):
             area = cv2.contourArea(contour)
-            # TODO: these magic numbers should be variablized
-            # something like MIN_BAG_AREA
-            if(area > 700):
-               # x,y,w,h = cv2.boundingRect(contour)
-               # cv2.drawContours(frame,contours,-1,(0,0,255),2)
-               # cv2.putText(frame,"RED color",(x,y),cv2.FONT_HERSHEY_SIMPLEX,0.7,(0,0,255))
+            if(area > MIN_BAG_AREA):
                red_count += 1
 
         contours, hierarchy = cv2.findContours(blue1,
@@ -60,9 +56,7 @@ def main():
         cv2.drawContours(frame, contours, -1, (255,0,0), 2)
         for pic, contour in enumerate(contours):
             area = cv2.contourArea(contour)
-            if(area > 700):
-                #cv2.drawContours(frame,contours,-1,(255,0,0),2)
-               # cv2.putText(frame,"BLUE color",(x,y),cv2.FONT_HERSHEY_SIMPLEX,0.7,(255,0,0))
+            if(area > MIN_BAG_AREA):
                 blue_count += 1
 
         # display stuff

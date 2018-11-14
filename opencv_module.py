@@ -6,10 +6,10 @@ red_count = 0
 prev_red = 5
 blue_count = 0
 prev_blue = 5
-MIN_BAG_AREA = 700
+min_bag_area = 700
 
 def main():
-    global cap, red_count, prev_red, blue_count, prev_blue, MIN_BAG_AREA
+    global cap, red_count, prev_red, blue_count, prev_blue, min_bag_area
 
     while(True):
         # Capture frame-by-frame

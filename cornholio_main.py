@@ -1,14 +1,17 @@
+#!/usr/bin/python
+
 import sys
 import time
 import signal
 import threading
 
-#import bluetooth.ble as bt
+# import bluetooth.ble as bt
 # import bluetooth as bt
 
-import opencv_mod as camera
-import light_sensor_mod as light_sensor
+import opencv_MOCK as camera
+import color_sensor_MOCK as color_sensor
 
+# Globals
 RUN = True
 NUM_THREADS = 0
 
@@ -16,7 +19,6 @@ BOARD_RED = 0
 BOARD_BLUE = 0
 HOLE_RED = 0
 HOLE_BLUE = 0
-
 
 # SRV_SOCK = bt.BluetoothSocket(bt.RFCOMM)
 # SRV_SOCK.bind(("", bt.PORT_ANY))
@@ -51,7 +53,7 @@ def main():
 
     last_send = 0
     while RUN:
-        HOLE_RED, HOLE_BLUE = light_sensor.read()
+        HOLE_RED, HOLE_BLUE = color_sensor.read()
 
         # read camera and send to phone every sec
         curr_time = time.time()

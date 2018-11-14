@@ -9,7 +9,7 @@ prev_blue = 5
 MIN_BAG_AREA = 700
 
 def main():
-    global cap, red_count, prev_red, blue_count, prev_blue
+    global cap, red_count, prev_red, blue_count, prev_blue, MIN_BAG_AREA
 
     while(True):
         # Capture frame-by-frame
@@ -43,7 +43,6 @@ def main():
         contours, hierarchy = cv2.findContours(red1,
                                                cv2.RETR_TREE,
                                                cv2.CHAIN_APPROX_NONE)
-       # contours = sorted(contours, key=cv2.contourArea, reverse=True)[:10]
         cv2.drawContours(frame, contours, -1, (0,0,255), 2)
         for pic, contour in enumerate(contours):
             area = cv2.contourArea(contour)

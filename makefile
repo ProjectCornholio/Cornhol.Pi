@@ -14,8 +14,8 @@ bluetoothLE: pip
 	sudo apt-get install -y libboost-thread-dev
 	sudo apt-get install -y libbluetooth-dev
 	sudo apt-get install -y libglib2.0-dev
-	sudo pip install pybluez
-	sudo pip install pybluez\[ble\]
+	sudo python -m pip install pybluez
+	#sudo pip install pybluez\[ble\]
 
 opencv: pip
 	sudo pip install opencv-python

@@ -54,7 +54,7 @@ class ColorSensor():
         return ret_val
         
 
-"""
+'''
 def read(bus):
     # read register from color sensor
     data = bus.read_i2c_block_data(0x29, 0)
@@ -107,7 +107,7 @@ def main():
 
     else:
             print "Device not found!\n"
-"""
+'''
 
 if __name__ == "__main__":
     sensor = ColorSensor()

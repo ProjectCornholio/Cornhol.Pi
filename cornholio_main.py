@@ -3,6 +3,7 @@
 import sys
 import time
 import signal
+import numpy
 import threading
 
 # import bluetooth.ble as bt
@@ -56,7 +57,7 @@ def main():
 
     last_send = 0
     while RUN:
-        BOARD_RED, BOARD_BLUE = camera.read()
+        BOARD_RED, BOARD_BLUE = camera.read(gui=True)
         new_red, new_blue = color_sensor.read()
         HOLE_RED += new_red
         HOLE_BLUE += new_blue
@@ -69,7 +70,7 @@ def main():
             tx_bt(msg)
             last_send = curr_time
 
-    print "We out!"
+    camera.close()
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal_handler)

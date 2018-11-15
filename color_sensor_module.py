@@ -3,12 +3,13 @@ import time
 
 class ColorSensor():
     def __init__(self):
+        print "Initializing Color Sensor..."
         self.__bus = smbus.SMBus(1)
         self.__bus.write_byte(0x29,0x80|0x12)
         ver = self.__bus.read_byte(0x29)
 
         if ver == 0x44:
-            print "device found!\n"
+            print "Version verified"
             self.__bus.write_byte(0x29, 0x80|0x00) # enable register
             self.__bus.write_byte(0x29, 0x01|0x02) # (power on | rgb sensor en)
             self.__bus.write_byte(0x29, 0x80|0x14) # read reg starts with 0x14
@@ -18,7 +19,8 @@ class ColorSensor():
             data = self.__bus.read_i2c_block_data(0x29, 0)
 
         else:
-                print "Device not found!\n"
+            print "Err: Could not find device"
+        print "Done"
         
     def read(self):
         # read register from color sensor

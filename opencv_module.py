@@ -3,6 +3,7 @@ import cv2
 
 class Camera():
     def __init__(self):
+        print "Initializing Camera..."
         self.__cap = cv2.VideoCapture(0)
         self.__red_count = 0
         self.__prev_red = 5
@@ -15,6 +16,7 @@ class Camera():
         self.__blue_upper = np.array([124, 255, 255], np.uint8)
         self.__kernal = np.ones((5,5), "uint8")
         self.__min_bag_area = 700
+        print "Done"
 
     def read(self):
         # Capture frame-by-frame

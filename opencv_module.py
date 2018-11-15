@@ -1,3 +1,4 @@
+import signal
 import numpy as np
 import cv2
 
@@ -18,7 +19,7 @@ class Camera():
         self.__min_bag_area = 700
         print "Done"
 
-    def read(self):
+    def read(self, gui=False):
         # Capture frame-by-frame
         red_count = 0
         blue_count = 0
@@ -49,6 +50,10 @@ class Camera():
             area = cv2.contourArea(contour)
             if(area > self.__min_bag_area):
                 blue_count += 1
+
+        if gui:
+            cv2.imshow("Color Tracking", frame)
+            cv2.waitKey(10)
 
         return red_count, blue_count
 
@@ -120,16 +125,27 @@ def main():
             cv2.destroyAllWindows()
             break
 
+def sig_handler(signal, frame):
+    global RUN
+    RUN = False
+
 if __name__ == "__main__":
+    global RUN
+    RUN = True
+    signal.signal(signal.SIGINT, sig_handler)
+    
     cam = Camera()
     red_cnt = 0
     blue_cnt = 0
     prev_red = red_cnt
     prev_blue = blue_cnt
 
-    while True:
-        red_cnt, blue_cnt = cam.read()
+    while RUN:
+        red_cnt, blue_cnt = cam.read(gui=True)
         if prev_red != red_cnt or prev_blue != blue_cnt:
             print "RED COUNT: %s\t\nBLUE COUNT:%s\t\n" % (str(red_cnt), str(blue_cnt))
             prev_red = red_cnt
             prev_blue = blue_cnt
+    cam.close()
+    #main()
+

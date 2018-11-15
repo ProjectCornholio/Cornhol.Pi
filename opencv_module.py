@@ -1,15 +1,14 @@
 import numpy as np
 import cv2
 
-cap = cv2.VideoCapture(0)
-red_count = 0
-prev_red = 5
-blue_count = 0
-prev_blue = 5
-min_bag_area = 700
 
 def main():
-    global cap, red_count, prev_red, blue_count, prev_blue, min_bag_area
+    cap = cv2.VideoCapture(0)
+    red_count = 0
+    prev_red = 5
+    blue_count = 0
+    prev_blue = 5
+    min_bag_area = 700
 
     while(True):
         # Capture frame-by-frame

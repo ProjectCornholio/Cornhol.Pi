@@ -9,7 +9,7 @@ import threading
 # import bluetooth as bt
 
 import opencv_MOCK as camera
-import color_sensor_MOCK as color_sensor
+import color_sensor_module
 
 # Globals
 RUN = True
@@ -49,11 +49,15 @@ def tx_bt(msg):
     print msg
 
 def main():
-    global RUN
+    global RUN, BOARD_RED, BOARD_BLUE, HOLE_RED, HOLE_BLUE
+    
+    color_sensor = color_sensor_module.ColorSensor()
 
     last_send = 0
     while RUN:
-        HOLE_RED, HOLE_BLUE = color_sensor.read()
+        new_red, new_blue = color_sensor.read()
+        HOLE_RED += new_red
+        HOLE_BLUE += new_blue
 
         # read camera and send to phone every sec
         curr_time = time.time()

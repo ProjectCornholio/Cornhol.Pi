@@ -1,7 +1,6 @@
 import smbus
 import time
 
-
 class ColorSensor():
     def __init__(self):
         self.__bus = smbus.SMBus(1)
@@ -28,19 +27,21 @@ class ColorSensor():
         red = data[3] << 8 | data[2]
         green = data[5] << 8 | data[4]
         blue = data[7] << 8 | data[6]
+        ret_val = (0,0)
 
         # detected red bag
+        # return a tuple of (red,blue)
         if (red - self.__prev_red) > (blue - self.__prev_blue) \
           and (red - self.__prev_red) >= 1000 \
           and self.__count > 1:
-            print "red bag detected!\n"
+            ret_val = (1,0)
             #time.sleep(0.15)
 
         # detected blue bag
         elif (blue - self.__prev_blue) > (red - self.__prev_red) \
           and (blue - self.__prev_blue) >= 800 \
           and self.__count > 0:
-            print "blue bag detected!\n"
+            ret_val = (0,1)
             #time.sleep(0.15)
 
         #crgb = "c: %s, R: %s, G: %s, B: %s\n" % (clear, red, green, blue)
@@ -49,8 +50,11 @@ class ColorSensor():
         self.__prev_blue = blue
         self.__count += 1
         #time.sleep(1)
+
+        return ret_val
         
 
+"""
 def read(bus):
     # read register from color sensor
     data = bus.read_i2c_block_data(0x29, 0)
@@ -103,8 +107,20 @@ def main():
 
     else:
             print "Device not found!\n"
+"""
 
 if __name__ == "__main__":
     sensor = ColorSensor()
+    red_cnt = 0
+    blue_cnt = 0
+    prev_red = red_cnt
+    prev_blue = blue_cnt
+
     while True:
-        sensor.read()
+        new_red, new_blue = sensor.read()
+        red_cnt += new_red
+        blue_cnt += new_blue
+        if prev_red != red_cnt or prev_blue != blue_cnt:
+            print "RED COUNT: %s\t\nBLUE COUNT:%s\t\n" % (str(red_cnt), str(blue_cnt))
+            prev_red = red_cnt
+            prev_blue = blue_cnt

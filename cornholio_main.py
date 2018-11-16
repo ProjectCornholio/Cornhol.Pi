@@ -27,6 +27,12 @@ class PhoneBT():
         self.__srv_sock = bt.BluetoothSocket(bt.RFCOMM)
         self.__srv_sock.bind(("", port))
         self.__srv_sock.listen(1)
+        self.__uuid = "aba30ef4-6074-4e27-b929-ac14e4b324a9"
+        bt.advertise_service(self.__srv_sock, "Cornhol.io_1",
+                             service_id = self.__uuid,
+                             service_classes = [self.__uuid, bt.SERIAL_PORT_CLASS],
+                             profiles = [bt.SERIAL_PORT_PROFILE]
+                             )
         self.__cli_sock, self.__cli_addr = self.__srv_sock.accept()
         self.__conn_good = True
         print "Connection established!"

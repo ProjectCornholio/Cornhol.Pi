@@ -7,10 +7,10 @@ import numpy
 import threading
 
 # import bluetooth.ble as bt
-# import bluetooth as bt
+import bluetooth as bt
 
-import opencv_module
-import color_sensor_module
+import opencv_MOCK as opencv_module
+import color_sensor_MOCK as color_sensor_module
 
 # Globals
 RUN = True
@@ -21,10 +21,35 @@ BOARD_BLUE = 0
 HOLE_RED = 0
 HOLE_BLUE = 0
 
-# SRV_SOCK = bt.BluetoothSocket(bt.RFCOMM)
-# SRV_SOCK.bind(("", bt.PORT_ANY))
-# SRV_SOCK.listen(1)
-# CLI_SOCK, CLI_INFO = SRV_SOCK.accept()
+class PhoneBT():
+    def __init__(self, port=bt.PORT_ANY):
+        print "Initializing Bluetooth connection with phone..."
+        self.__srv_sock = bt.BluetoothSocket(bt.RFCOMM)
+        self.__srv_sock.bind(("", port))
+        self.__srv_sock.listen(1)
+        self.__cli_sock, self.__cli_addr = self.__srv_sock.accept()
+        self.__conn_good = True
+        print "Connection established!"
+        pass
+
+    def tx(self, msg):
+        try:
+            return self.__cli_sock.send(msg)
+        except bt.btcommon.BluetoothError:
+            print "Lost connection to phone. Attempting to reconnect..."
+            self.reconnect()
+
+    def rx(self, buff_size=255):
+        return self.__cli_sock.recv(size)
+
+    def reconnect(self):
+        self.__cli_sock, self.__cli_addr = self.__srv_sock.accept()
+        print "We back boiiiii"
+
+    def close(self):
+        print "Closing connection to phone"
+        self.__srv_sock.close()
+        self.__cli_sock.close()
 
 def test_thread():
     global NUM_THREADS
@@ -39,19 +64,10 @@ def signal_handler(sig, frame):
     global RUN
     RUN = False
 
-def rx_bt(buffsize):
-    # global CLI_SOCK
-    # print CLI_SOCK.recv(buffsize)
-    print buffsize
-
-def tx_bt(msg):
-    # global CLI_SOCK
-    # CLI_SOCK.send(msg)
-    print msg
-
 def main():
     global RUN, BOARD_RED, BOARD_BLUE, HOLE_RED, HOLE_BLUE
     
+    phone = PhoneBT()
     color_sensor = color_sensor_module.ColorSensor()
     camera = opencv_module.Camera()
 
@@ -67,10 +83,11 @@ def main():
         if curr_time - last_send > 1:
             msg = "Board:\tRED: %s\n\tBLUE: %s\n" % (BOARD_RED, BOARD_BLUE)
             msg += "Hole:\tRED: %s\n\tBLUE: %s\n" % (HOLE_RED, HOLE_BLUE)
-            tx_bt(msg)
+            phone.tx(msg)
             last_send = curr_time
 
     camera.close()
+    phone.close()
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal_handler)

@@ -10,7 +10,7 @@ pip:
 	sudo apt-get install python-pip -y
 
 btname:
-	sudo echo "PRETTY-HOSTNAME=Cornhol.io_$(DEV_NUM)" > /etc/machine-info
+	sudo echo "PRETTY_HOSTNAME=Cornhol.io_$(DEV_NUM)" > /etc/machine-info
 
 bluetoothLE: pip
 	sudo apt-get install -y pkg-config

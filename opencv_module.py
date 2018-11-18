@@ -11,10 +11,10 @@ class Camera():
         self.__blue_count = 0
         self.__prev_blue = 5
 
-        self.__red_lower = np.array([135, 64, 43], np.uint8)
+        self.__red_lower = np.array([135, 114, 43], np.uint8)
         self.__red_upper = np.array([180, 255, 255], np.uint8)
-        self.__blue_lower = np.array([91, 74, 65], np.uint8)
-        self.__blue_upper = np.array([124, 255, 255], np.uint8)
+        self.__blue_lower = np.array([91, 180, 72], np.uint8)
+        self.__blue_upper = np.array([118, 255, 255], np.uint8)
         self.__kernal = np.ones((5,5), "uint8")
         self.__min_bag_area = 700
         print "Done"
@@ -24,6 +24,11 @@ class Camera():
         red_count = 0
         blue_count = 0
         ret, frame = self.__cap.read()
+        
+        #mask = np.zeros((480, 640), dtype=np.uint8)
+        #roi = [(0, 480), (320, 240), (640, 480)]
+        #cv2.fillConvexPoly(mask, np.array(roi), 255)
+        #frame = cv2.bitwise_and(frame, frame, mask=mask)
         frame = frame[0:720, 85:525]
 
         # set color values in hsv spectrum and dilate

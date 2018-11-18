@@ -9,8 +9,8 @@ import threading
 # import bluetooth.ble as bt
 import bluetooth as bt
 
-import opencv_MOCK as opencv_module
-import color_sensor_MOCK as color_sensor_module
+import opencv_module
+import color_sensor_module
 
 # Globals
 RUN = True
@@ -27,12 +27,14 @@ class PhoneBT():
         self.__srv_sock = bt.BluetoothSocket(bt.RFCOMM)
         self.__srv_sock.bind(("", port))
         self.__srv_sock.listen(1)
+        '''
         self.__uuid = "aba30ef4-6074-4e27-b929-ac14e4b324a9"
         bt.advertise_service(self.__srv_sock, "Cornhol.io_1",
                              service_id = self.__uuid,
                              service_classes = [self.__uuid, bt.SERIAL_PORT_CLASS],
                              profiles = [bt.SERIAL_PORT_PROFILE]
                              )
+        '''
         self.__cli_sock, self.__cli_addr = self.__srv_sock.accept()
         self.__conn_good = True
         print "Connection established!"
@@ -73,7 +75,7 @@ def signal_handler(sig, frame):
 def main():
     global RUN, BOARD_RED, BOARD_BLUE, HOLE_RED, HOLE_BLUE
     
-    phone = PhoneBT()
+    #phone = PhoneBT()
     color_sensor = color_sensor_module.ColorSensor()
     camera = opencv_module.Camera()
 
@@ -89,11 +91,12 @@ def main():
         if curr_time - last_send > 1:
             msg = "Board:\tRED: %s\n\tBLUE: %s\n" % (BOARD_RED, BOARD_BLUE)
             msg += "Hole:\tRED: %s\n\tBLUE: %s\n" % (HOLE_RED, HOLE_BLUE)
-            phone.tx(msg)
+            #phone.tx(msg)
+            print msg
             last_send = curr_time
 
     camera.close()
-    phone.close()
+    #phone.close()
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal_handler)

@@ -74,8 +74,8 @@ def signal_handler(sig, frame):
 
 def main():
     global RUN, BOARD_RED, BOARD_BLUE, HOLE_RED, HOLE_BLUE
-    
-    #phone = PhoneBT()
+
+    phone = PhoneBT()
     color_sensor = color_sensor_module.ColorSensor()
     camera = opencv_module.Camera()
 

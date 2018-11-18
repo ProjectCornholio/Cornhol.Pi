@@ -1,5 +1,7 @@
+#!/usr/bin/python
+
+import os.path
 import signal
-import random
 import time
 import subprocess as sp
 import numpy as np
@@ -8,7 +10,7 @@ from openpyxl.chart import (ScatterChart,
                             Reference,
                             Series)
 
-def write_excel(data):
+def write_excel(data, fname):
     # write data to excel spreadsheet
     wb = Workbook()
     ws = wb.active
@@ -28,7 +30,6 @@ def write_excel(data):
     chart.series.append(series)
     ws.add_chart(chart, "D2")
 
-    fname = "foo.xlsx"
     wb.save(fname)
     print "%s saved!" % (fname)
 
@@ -69,7 +70,13 @@ def rssi_test():
             RUN = False
             print
 
-    write_excel(data)
+    fname_base = "rssi_measurements%s.xlsx"
+    fname = fname_base % ("")
+    i = 1
+    while os.path.exists(fname):
+        fname = fname_base % ("_" + str(i))
+        i += 1
+    write_excel(data, fname)
 
 if __name__ == "__main__":
     rssi_test()

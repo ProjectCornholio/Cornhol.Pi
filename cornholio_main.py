@@ -48,7 +48,7 @@ class PhoneBT():
             self.reconnect()
 
     def rx(self, buff_size=255):
-        return self.__cli_sock.recv(size)
+        return self.__cli_sock.recv(buff_size)
 
     def reconnect(self):
         self.__cli_sock, self.__cli_addr = self.__srv_sock.accept()
@@ -91,12 +91,12 @@ def main():
         if curr_time - last_send > 1:
             msg = "Board:\tRED: %s\n\tBLUE: %s\n" % (BOARD_RED, BOARD_BLUE)
             msg += "Hole:\tRED: %s\n\tBLUE: %s\n" % (HOLE_RED, HOLE_BLUE)
-            #phone.tx(msg)
+            phone.tx(msg)
             print msg
             last_send = curr_time
 
     camera.close()
-    #phone.close()
+    phone.close()
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal_handler)

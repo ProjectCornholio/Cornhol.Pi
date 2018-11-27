@@ -11,10 +11,10 @@ class Camera():
         self.__blue_count = 0
         self.__prev_blue = 5
 
-        self.__red_lower = np.array([135, 117, 42], np.uint8)
+        self.__red_lower = np.array([11, 144, 118], np.uint8)
         self.__red_upper = np.array([180, 255, 255], np.uint8)
-        self.__blue_lower = np.array([91, 100, 72], np.uint8)
-        self.__blue_upper = np.array([118, 255, 255], np.uint8)
+        self.__blue_lower = np.array([17, 137, 85], np.uint8)
+        self.__blue_upper = np.array([180, 255, 117], np.uint8)
         self.__kernal = np.ones((5,5), "uint8")
         self.__min_bag_area = 700
         print "Done"
@@ -32,7 +32,7 @@ class Camera():
         #frame = frame[0:720, 85:525]
 
         # set color values in hsv spectrum and dilate
-        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2LAB)
         red = cv2.inRange(hsv, self.__red_lower, self.__red_upper)
         blue = cv2.inRange(hsv, self.__blue_lower, self.__blue_upper)
         red_dilate = cv2.dilate(red, self.__kernal)

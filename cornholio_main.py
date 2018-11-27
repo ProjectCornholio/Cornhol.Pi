@@ -9,8 +9,8 @@ import threading
 # import bluetooth.ble as bt
 import bluetooth as bt
 
-import opencv_MOCK as opencv_module
-import color_sensor_MOCK as color_sensor_module
+import opencv_module
+import color_sensor_module
 
 # Globals
 RUN = True
@@ -128,12 +128,21 @@ def main(phone):
     color_sensor = color_sensor_module.ColorSensor()
     camera = opencv_module.Camera()
 
-    last_send = 0
+    prev_time = 0
     while RUN:
         BOARD_RED, BOARD_BLUE = camera.read(gui=True)
         new_red, new_blue = color_sensor.read()
         HOLE_RED += new_red
         HOLE_BLUE += new_blue
+
+        send_rate = .5
+        curr_time = time.time()
+        if curr_time - prev_time > send_rate:
+            msg = "Board:\tRED: %s\n\tBLUE: %s\n" % (BOARD_RED, BOARD_BLUE)
+            msg += "Hole:\tRED: %s\n\tBLUE: %s\n" % (HOLE_RED, HOLE_BLUE)
+            phone.tx(msg)
+            print msg
+            prev_time = time.time()
 
     camera.close()
     if phone.is_connected():
@@ -147,7 +156,7 @@ if __name__ == "__main__":
         sys.exit()
     my_tx_thread = threading.Thread(target=tx_thread, args=(phone,), kwargs={})
     my_rx_thread = threading.Thread(target=rx_thread, args=(phone,), kwargs={})
-    my_tx_thread.start()
+    #my_tx_thread.start()
     my_rx_thread.start()
     main(phone)
     while threading.active_count() > 1:

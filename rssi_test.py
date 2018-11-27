@@ -63,7 +63,7 @@ def rssi_test():
         try:
             print "Distance:",
             distance = int(raw_input())
-            data.append([distance , get_avg_rssi(1)])
+            data.append([distance , get_avg_rssi(3)])
         except ValueError:
             print "Dingus"
         except KeyboardInterrupt:

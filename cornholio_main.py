@@ -141,7 +141,8 @@ def main(phone):
         if curr_time - prev_time > send_rate:
             msg = "Board:\tRED: %s\n\tBLUE: %s\n" % (BOARD_RED, BOARD_BLUE)
             msg += "Hole:\tRED: %s\n\tBLUE: %s\n" % (HOLE_RED, HOLE_BLUE)
-            phone.tx(msg)
+            phone.tx("%s,%s,%s,%s" % (BOARD_RED, HOLE_RED,
+                                      BOARD_BLUE, HOLE_BLUE))
             print msg
             prev_time = time.time()
 

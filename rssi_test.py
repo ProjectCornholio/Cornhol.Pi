@@ -41,6 +41,7 @@ def get_avg_rssi(duration=0):
     pi_mac = "B4:F1:DA:6B:43:E4"
     cmd = "hcitool rssi %s" % (pi_mac)
 
+    # avg sample over time
     if duration != 0:
         rssi_values = []
         start = time.time()
@@ -48,11 +49,15 @@ def get_avg_rssi(duration=0):
             hci_output = sp.check_output(cmd.split()).strip()
             rssi = int(hci_output.split()[3])
             rssi_values.append(rssi)
-        return float(format(np.mean(rssi_values), ".2f"))
+        avg_rssi = float(format(np.mean(rssi_values), ".2f"))
+        print "measured: ", avg_rssi, "\n"
+        return avg_rssi
 
+    # single sample
     else:
         hci_output = sp.check_output(cmd.split()).strip()
         rssi = int(hci_output.split()[3])
+        print "measured: ", rssi, "\n"
         return float(format(rssi, ".2f"))
 
 def rssi_test():

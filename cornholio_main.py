@@ -5,7 +5,7 @@ import time
 import signal
 import numpy
 import select
-import gpiozero
+from gpiozero import Button
 
 # import bluetooth.ble as bt
 import bluetooth as bt
@@ -101,6 +101,9 @@ def rx_to_phone(phone):
             HOLE_RED = 0
             HOLE_BLUE = 0
 
+def do_bt_pairing():
+    return
+
 def signal_handler(sig, frame):
     global RUN
     RUN = False
@@ -110,6 +113,8 @@ def main(phone):
 
     color_sensor = color_sensor_module.ColorSensor()
     camera = opencv_module.Camera()
+    pairing_btn = Button(24) # button connected to GPIO24
+    pairing_btn.when_pressed = do_bt_pairing
 
     prev_time = 0
     while RUN:

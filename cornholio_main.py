@@ -10,8 +10,8 @@ import select
 # import bluetooth.ble as bt
 import bluetooth as bt
 
-import opencv_module
-import color_sensor_module
+import opencv_MOCK as opencv_module
+import color_sensor_MOCK as color_sensor_module
 
 # Globals
 RUN = True
@@ -81,8 +81,7 @@ class PhoneBT():
         self.__srv_sock.close()
         self.__cli_sock.close()
 
-"""
-def tx_thread(phone, send_rate=1):
+def tx_thread(phone, send_rate=1): 
     global NUM_THREADS, RUN, \
            BOARD_RED, BOARD_BLUE, \
            HOLE_RED, HOLE_BLUE
@@ -121,9 +120,9 @@ def rx_thread(phone):
         except AttributeError:
             pass
     NUM_THREADS -= 1
-"""
 
 def tx_to_phone(phone):
+    global RUN, BOARD_RED, BOARD_BLUE, HOLE_RED, HOLE_BLUE
     msg = "Board:\tRED: %s\n\tBLUE: %s\n" % (BOARD_RED, BOARD_BLUE)
     msg += "Hole:\tRED: %s\n\tBLUE: %s\n" % (HOLE_RED, HOLE_BLUE)
     phone.tx("%s,%s,%s,%s" % (BOARD_RED, HOLE_RED,
@@ -131,15 +130,18 @@ def tx_to_phone(phone):
     print msg
 
 def rx_to_phone(phone):
-    msg = phone.rx(255).strip()
-    print msg
-    if msg == "stop":
-        RUN = False
-    elif msg == "clear":
-        BOARD_RED = 0
-        BOARD_BLUE = 0
-        HOLE_RED = 0
-        HOLE_BLUE = 0
+    global RUN, BOARD_RED, BOARD_BLUE, HOLE_RED, HOLE_BLUE
+    msg = phone.rx(255)
+    if msg != None:
+        msg = msg.strip() 
+        print msg
+        if msg == "STOP": 
+            RUN = False
+        elif msg == "CLEAR":
+            BOARD_RED = 0
+            BOARD_BLUE = 0
+            HOLE_RED = 0
+            HOLE_BLUE = 0
 
 def signal_handler(sig, frame):
     global RUN

@@ -4,8 +4,8 @@ import sys
 import time
 import signal
 import numpy
-import threading
 import select
+import gpiozero
 
 # import bluetooth.ble as bt
 import bluetooth as bt
@@ -15,8 +15,6 @@ import color_sensor_MOCK as color_sensor_module
 
 # Globals
 RUN = True
-NUM_THREADS = 0
-
 BOARD_RED = 0
 BOARD_BLUE = 0
 HOLE_RED = 0
@@ -81,46 +79,6 @@ class PhoneBT():
         self.__srv_sock.close()
         self.__cli_sock.close()
 
-def tx_thread(phone, send_rate=1): 
-    global NUM_THREADS, RUN, \
-           BOARD_RED, BOARD_BLUE, \
-           HOLE_RED, HOLE_BLUE
-
-    NUM_THREADS += 1
-    prev_time = 0
-    while RUN:
-        curr_time = time.time()
-        if curr_time - prev_time > send_rate:
-            msg = "Board:\tRED: %s\n\tBLUE: %s\n" % (BOARD_RED, BOARD_BLUE)
-            msg += "Hole:\tRED: %s\n\tBLUE: %s\n" % (HOLE_RED, HOLE_BLUE)
-            phone.tx("%s,%s,%s,%s" % (BOARD_RED, HOLE_RED,
-                                      BOARD_BLUE, HOLE_BLUE))
-            print msg
-            prev_time = time.time()
-    NUM_THREADS -= 1
-
-def rx_thread(phone):
-    global NUM_THREADS, RUN, \
-           BOARD_RED, BOARD_BLUE, \
-           HOLE_RED, HOLE_BLUE
-
-    NUM_THREADS += 1
-    while RUN:
-        try:
-            msg = phone.rx(255).strip()
-            print msg
-            if msg == "stop":
-                RUN = False
-            elif msg == "clear":
-                BOARD_RED = 0
-                BOARD_BLUE = 0
-                HOLE_RED = 0
-                HOLE_BLUE = 0
-
-        except AttributeError:
-            pass
-    NUM_THREADS -= 1
-
 def tx_to_phone(phone):
     global RUN, BOARD_RED, BOARD_BLUE, HOLE_RED, HOLE_BLUE
     msg = "Board:\tRED: %s\n\tBLUE: %s\n" % (BOARD_RED, BOARD_BLUE)
@@ -177,14 +135,4 @@ if __name__ == "__main__":
     phone = PhoneBT()
     if phone == None:
         sys.exit()
-    '''
-    my_tx_thread = threading.Thread(target=tx_thread, args=(phone,), kwargs={})
-    my_rx_thread = threading.Thread(target=rx_thread, args=(phone,), kwargs={})
-    #my_tx_thread.start()
-    my_rx_thread.start()
-    '''
     main(phone)
-    while threading.active_count() > 1:
-        # main will count as a thread, so we're looking for more than 1
-        # print "active threads:", threading.active_count()
-        pass

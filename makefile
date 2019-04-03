@@ -32,3 +32,6 @@ no_sleep:
 	@echo "@xset s off" >> ~/.config/lxsession/LXDE-pi/autostart
 	@echo "@xset -dpms" >> ~/.config/lxsession/LXDE-pi/autostart
 
+autostart:
+	@echo "@lxterminal" >> ~/.config/lxsession/LXDE-pi/autostart
+	@echo "Cornhol.Pi/cornholio_main.py" >> ~/.bashrc

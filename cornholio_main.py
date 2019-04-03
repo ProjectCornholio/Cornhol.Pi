@@ -5,6 +5,7 @@ import time
 import signal
 import numpy
 import select
+import subprocess as sp
 from gpiozero import Button
 
 # import bluetooth.ble as bt
@@ -102,6 +103,7 @@ def rx_to_phone(phone):
             HOLE_BLUE = 0
 
 def do_bt_pairing():
+    sp.call(r"echo -e 'discoverable on\npairable on\nexit\n' | bluetoothctl")
     return
 
 def signal_handler(sig, frame):

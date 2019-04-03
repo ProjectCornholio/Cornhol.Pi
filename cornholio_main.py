@@ -5,6 +5,7 @@ import time
 import signal
 import numpy
 import threading
+import select
 
 # import bluetooth.ble as bt
 import bluetooth as bt
@@ -53,7 +54,8 @@ class PhoneBT():
             self.reconnect()
 
     def rx(self, buff_size=255):
-        if self.__conn_good:
+        conn_ready = select.select([self.__cli_sock], [], [], 0.1)
+        if self.__conn_good and conn_ready[0]:
             try:
                 return self.__cli_sock.recv(buff_size)
             except bt.btcommon.BluetoothError:
@@ -79,6 +81,7 @@ class PhoneBT():
         self.__srv_sock.close()
         self.__cli_sock.close()
 
+"""
 def tx_thread(phone, send_rate=1):
     global NUM_THREADS, RUN, \
            BOARD_RED, BOARD_BLUE, \
@@ -118,6 +121,25 @@ def rx_thread(phone):
         except AttributeError:
             pass
     NUM_THREADS -= 1
+"""
+
+def tx_to_phone(phone):
+    msg = "Board:\tRED: %s\n\tBLUE: %s\n" % (BOARD_RED, BOARD_BLUE)
+    msg += "Hole:\tRED: %s\n\tBLUE: %s\n" % (HOLE_RED, HOLE_BLUE)
+    phone.tx("%s,%s,%s,%s" % (BOARD_RED, HOLE_RED,
+             BOARD_BLUE, HOLE_BLUE))
+    print msg
+
+def rx_to_phone(phone):
+    msg = phone.rx(255).strip()
+    print msg
+    if msg == "stop":
+        RUN = False
+    elif msg == "clear":
+        BOARD_RED = 0
+        BOARD_BLUE = 0
+        HOLE_RED = 0
+        HOLE_BLUE = 0
 
 def signal_handler(sig, frame):
     global RUN
@@ -139,11 +161,8 @@ def main(phone):
         send_rate = .5
         curr_time = time.time()
         if curr_time - prev_time > send_rate:
-            msg = "Board:\tRED: %s\n\tBLUE: %s\n" % (BOARD_RED, BOARD_BLUE)
-            msg += "Hole:\tRED: %s\n\tBLUE: %s\n" % (HOLE_RED, HOLE_BLUE)
-            phone.tx("%s,%s,%s,%s" % (BOARD_RED, HOLE_RED,
-                                      BOARD_BLUE, HOLE_BLUE))
-            print msg
+            tx_to_phone(phone)
+            rx_to_phone(phone)
             prev_time = time.time()
 
     camera.close()
@@ -156,10 +175,12 @@ if __name__ == "__main__":
     phone = PhoneBT()
     if phone == None:
         sys.exit()
+    '''
     my_tx_thread = threading.Thread(target=tx_thread, args=(phone,), kwargs={})
     my_rx_thread = threading.Thread(target=rx_thread, args=(phone,), kwargs={})
     #my_tx_thread.start()
     my_rx_thread.start()
+    '''
     main(phone)
     while threading.active_count() > 1:
         # main will count as a thread, so we're looking for more than 1

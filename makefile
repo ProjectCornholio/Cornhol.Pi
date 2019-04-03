@@ -33,5 +33,11 @@ no_sleep:
 	@echo "@xset -dpms" >> ~/.config/lxsession/LXDE-pi/autostart
 
 autostart:
-	@echo "@lxterminal" >> ~/.config/lxsession/LXDE-pi/autostart
-	@echo "Cornhol.Pi/cornholio_main.py" >> ~/.bashrc
+	sudo apt-get install -y xterm
+	mkdir ~/.config/autostart
+	echo "[Desktop Entry]" >> ~/.config/autostart/lxterm-autostart.desktop
+	echo "Encoding=UTF-8" >> ~/.config/autostart/lxterm-autostart.desktop
+	echo "Name=Terminal autostart" >> ~/.config/autostart/lxterm-autostart.desktop
+	echo "Comment=Autostart terminal and run cornholio_main.py" >> ~/.config/autostart/lxterm-autostart.desktop
+	echo "Exec=/usr/bin/lxterm -e 'Cornhol.Pi/cornholio_main.py'" >> ~/.config/autostart/lxterm-autostart.desktop
+

@@ -27,3 +27,8 @@ opencv: pip
 lightsensor:
 	sudo apt-get install -y python-smbus i2c-tools
 
+no_sleep:
+	@echo "@xset s noblank" >> ~/.config/lxsession/LXDE-pi/autostart
+	@echo "@xset s off" >> ~/.config/lxsession/LXDE-pi/autostart
+	@echo "@xset -dpms" >> ~/.config/lxsession/LXDE-pi/autostart
+

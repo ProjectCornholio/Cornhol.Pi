@@ -16,7 +16,7 @@ class Camera():
         self.__blue_lower = np.array([17, 137, 85], np.uint8)
         self.__blue_upper = np.array([180, 255, 117], np.uint8)
         self.__kernal = np.ones((5,5), "uint8")
-        self.__min_bag_area = 700
+        self.__min_bag_area = 270
         print "Done"
 
     def read(self, gui=False):

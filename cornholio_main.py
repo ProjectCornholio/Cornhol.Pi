@@ -116,9 +116,9 @@ def bt_pairing():
     global BT_PARING_MODE
     list_paired_bt_devices()
     if not BT_PARING_MODE:
-        print btctl(["discoverable on", "parable on"])
+        print btctl(["discoverable on", "pairable on"])
     else:
-        print btctl("discoverable off")
+        print btctl(["discoverable off", "pairable off"])
     BT_PARING_MODE = not BT_PARING_MODE
 
 def list_paired_bt_devices():

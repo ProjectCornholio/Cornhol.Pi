@@ -16,6 +16,7 @@ import color_sensor_MOCK as color_sensor_module
 
 # Globals
 RUN = True
+BT_PARING_MODE = False
 BOARD_RED = 0
 BOARD_BLUE = 0
 HOLE_RED = 0
@@ -101,22 +102,39 @@ def rx_to_phone(phone):
             BOARD_BLUE = 0
             HOLE_RED = 0
             HOLE_BLUE = 0
+def btctl(cmd):
+    if type(cmd) == list:
+        for i in range(len(cmd)):
+            cmd[i] += "\n"
+        cmd = "".join(cmd)
+    elif type(cmd) == str:
+        cmd += "\n"
+    output = sp.check_output("echo '%sexit\n' | bluetoothctl" % cmd, shell=True)
+    return output
 
-def do_bt_pairing():
-    sp.call(r"echo -e 'discoverable on\npairable on\nexit\n' | bluetoothctl")
-    return
+def bt_pairing():
+    global BT_PARING_MODE
+    list_paired_bt_devices()
+    if not BT_PARING_MODE:
+        print btctl(["discoverable on", "parable on"])
+    else:
+        print btctl("discoverable off")
+    BT_PARING_MODE = not BT_PARING_MODE
+
+def list_paired_bt_devices():
+    print btctl("devices")
 
 def signal_handler(sig, frame):
-    global RUN
+    global RUN, BT_PARING_MODE
     RUN = False
+    BT_PARING_MODE = True
+    bt_pairing()
 
 def main(phone):
     global RUN, BOARD_RED, BOARD_BLUE, HOLE_RED, HOLE_BLUE
 
     color_sensor = color_sensor_module.ColorSensor()
     camera = opencv_module.Camera()
-    pairing_btn = Button(24) # button connected to GPIO24
-    pairing_btn.when_pressed = do_bt_pairing
 
     prev_time = 0
     while RUN:
@@ -138,7 +156,8 @@ def main(phone):
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal_handler)
-    # thread.start_new_thread(test_thread, ())
+    pairing_btn = Button(24) # button connected to GPIO24
+    pairing_btn.when_pressed = bt_pairing
     phone = PhoneBT()
     if phone == None:
         sys.exit()

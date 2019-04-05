@@ -26,7 +26,7 @@ class Camera():
         ret, frame = self.__cap.read()
         
         mask = np.zeros((480, 640), dtype=np.uint8)
-        roi = [(90, 480),(190, 10),(435, 10), (525, 480)]
+        roi = [(125, 470),(212, 19),(452, 19), (535, 470)]
         cv2.fillConvexPoly(mask, np.array(roi), 255)
         frame = cv2.bitwise_and(frame, frame, mask=mask)
         #frame = frame[0:720, 85:525]
